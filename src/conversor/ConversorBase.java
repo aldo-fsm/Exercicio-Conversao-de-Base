@@ -17,6 +17,7 @@ public class ConversorBase {
 			} else if (baseDestino == 10) {
 				return Integer.toString(paraDecimal(numero, baseOrigem));
 			} else {
+				// baseOrigem --> base10 --> baseDestino
 				return deDecimal(paraDecimal(numero, baseDestino), baseOrigem);
 			}
 
