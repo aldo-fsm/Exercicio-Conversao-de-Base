@@ -8,7 +8,7 @@ public class ConversorBase {
 		numero.toUpperCase();
 
 		return null;
-	}
+	} 
 
 	private int paraDecimal(String numero, int base) {
 
