@@ -4,7 +4,6 @@ import conversor.ConversorBase;
 
 public class Teste {
 	public static void main(String[] args) {
-		System.out.println(ConversorBase.converter("5",10,2));
-		
+		System.out.println(ConversorBase.converter("123",10,16));
 	}
 }

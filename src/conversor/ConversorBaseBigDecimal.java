@@ -19,7 +19,7 @@ public class ConversorBaseBigDecimal {
 				} else if (baseOrigem == 10) {
 					return deDecimal(new BigDecimal(numero), baseDestino);
 				} else if (baseDestino == 10) {
-					return paraDecimal(numero, baseOrigem) + "";
+					return paraDecimal(numero, baseOrigem).toString();
 				} else {
 					// baseOrigem --> base10 --> baseDestino
 					return deDecimal(paraDecimal(numero, baseOrigem), baseDestino);
