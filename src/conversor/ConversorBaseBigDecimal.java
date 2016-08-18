@@ -1,12 +1,12 @@
 package conversor;
 
+import java.math.BigDecimal;
 import java.security.InvalidParameterException;
 
-public class ConversorBase {
-
+public class ConversorBaseBigDecimal {
 	private static final String digitos = "0123456789ABCDEF";
 
-	public static String converter(String numero, long baseOrigem, long baseDestino) {
+	public static String converter(String numero, int baseOrigem, int baseDestino) {
 
 		numero.toUpperCase();
 
@@ -17,9 +17,9 @@ public class ConversorBase {
 				if (baseDestino == baseOrigem) {
 					return numero;
 				} else if (baseOrigem == 10) {
-					return deDecimal(Long.parseLong(numero), baseDestino);
+					return deDecimal(new BigDecimal(numero), baseDestino);
 				} else if (baseDestino == 10) {
-					return Long.toString(paraDecimal(numero, baseOrigem));
+					return paraDecimal(numero, baseOrigem) + "";
 				} else {
 					// baseOrigem --> base10 --> baseDestino
 					return deDecimal(paraDecimal(numero, baseOrigem), baseDestino);
@@ -43,25 +43,27 @@ public class ConversorBase {
 	}
 
 	// parte iterativa
-	private static long paraDecimal(String numero, long base) {
+	private static BigDecimal paraDecimal(String numero, int base) {
 
-		long decimal = 0;
+		BigDecimal decimal = BigDecimal.ZERO;
 		long numeroDigitos = numero.length();
+		BigDecimal bigBase = BigDecimal.valueOf(base);
 
 		for (int i = 0; i < numeroDigitos; i++) {
-			long valorDigito = digitos.indexOf(numero.charAt(i));
-			decimal += valorDigito * Math.pow(base, numeroDigitos - 1 - i);
+			BigDecimal valorDigito = BigDecimal.valueOf(digitos.indexOf(numero.charAt(i)));
+			decimal = decimal.add(valorDigito.multiply(bigBase.pow((int) (numeroDigitos - 1 - i))));
 		}
 
 		return decimal;
 	}
 
 	// parte recursiva
-	private static String deDecimal(long decimal, long baseDestino) {
-		if (decimal < baseDestino) {
-			return Character.toString(digitos.charAt((int) decimal));
+	private static String deDecimal(BigDecimal decimal, int baseDestino) {
+		if (decimal.compareTo(BigDecimal.valueOf(baseDestino)) > 0) {
+			return Character.toString(digitos.charAt(decimal.intValue()));
 		} else {
-			return deDecimal(decimal / baseDestino, baseDestino) + digitos.charAt((int) (decimal % baseDestino));
+			return deDecimal(decimal.divide(BigDecimal.valueOf(baseDestino), BigDecimal.ROUND_UNNECESSARY), baseDestino)
+					+ digitos.charAt((decimal.remainder(BigDecimal.valueOf(baseDestino)).intValue())) + "";
 		}
 	}
 }
