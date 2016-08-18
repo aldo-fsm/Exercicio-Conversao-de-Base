@@ -1,33 +1,49 @@
 package conversor;
 
+import java.security.InvalidParameterException;
+
 public class ConversorBase {
 
 	private static final String digitos = "0123456789ABCDEF";
 
-	public String converter(String numero, int baseOrigem, int baseDestino) {
+	public static String converter(String numero, int baseOrigem, int baseDestino) {
 
 		numero.toUpperCase();
 
 		if (baseOrigem >= 2 && baseOrigem <= 16 && baseDestino >= 2 && baseDestino <= 16) {
 
-			if (baseDestino == baseOrigem) {
-				return numero;
-			} else if (baseOrigem == 10) {
-				return deDecimal(Integer.parseInt(numero), baseDestino);
-			} else if (baseDestino == 10) {
-				return Integer.toString(paraDecimal(numero, baseOrigem));
+			if (verificarBase(numero, baseOrigem)) {
+
+				if (baseDestino == baseOrigem) {
+					return numero;
+				} else if (baseOrigem == 10) {
+					return deDecimal(Integer.parseInt(numero), baseDestino);
+				} else if (baseDestino == 10) {
+					return Integer.toString(paraDecimal(numero, baseOrigem));
+				} else {
+					// baseOrigem --> base10 --> baseDestino
+					return deDecimal(paraDecimal(numero, baseOrigem), baseDestino);
+				}
+
 			} else {
-				// baseOrigem --> base10 --> baseDestino
-				return deDecimal(paraDecimal(numero, baseDestino), baseOrigem);
+				throw new InvalidParameterException("O numero não está na base informada");
 			}
-
+		} else {
+			throw new InvalidParameterException("Base invalida");
 		}
+	}
 
-		return null;
+	private static boolean verificarBase(String numero, int base) {
+		for (int i = 0; i < numero.length(); i++) {
+			if (digitos.indexOf(numero.charAt(i)) >= base) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// parte iterativa
-	private int paraDecimal(String numero, int base) {
+	private static int paraDecimal(String numero, int base) {
 
 		int decimal = 0;
 		int numeroDigitos = numero.length();
@@ -41,8 +57,11 @@ public class ConversorBase {
 	}
 
 	// parte recursiva
-	private String deDecimal(int decimal, int baseDestino) {
-
-		return null;
+	private static String deDecimal(int decimal, int baseDestino) {
+		if (decimal < baseDestino) {
+			return Character.toString(digitos.charAt(decimal));
+		} else {
+			return deDecimal(decimal / baseDestino, baseDestino) + digitos.charAt(decimal % baseDestino);
+		}
 	}
 }
