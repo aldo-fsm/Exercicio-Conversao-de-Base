@@ -59,10 +59,11 @@ public class ConversorBaseBigDecimal {
 
 	// parte recursiva
 	private static String deDecimal(BigDecimal decimal, int baseDestino) {
-		if (decimal.compareTo(BigDecimal.valueOf(baseDestino)) > 0) {
+		
+		if (decimal.compareTo(BigDecimal.valueOf(baseDestino)) < 0) {
 			return Character.toString(digitos.charAt(decimal.intValue()));
 		} else {
-			return deDecimal(decimal.divide(BigDecimal.valueOf(baseDestino), BigDecimal.ROUND_UNNECESSARY), baseDestino)
+			return deDecimal(decimal.divide(BigDecimal.valueOf(baseDestino), BigDecimal.ROUND_DOWN), baseDestino)
 					+ digitos.charAt((decimal.remainder(BigDecimal.valueOf(baseDestino)).intValue())) + "";
 		}
 	}
