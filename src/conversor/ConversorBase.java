@@ -8,7 +8,7 @@ public class ConversorBase {
 
 	public static String converter(String numero, long baseOrigem, long baseDestino) {
 
-		numero.toUpperCase();
+		numero = numero.toUpperCase();
 
 		if (baseOrigem >= 2 && baseOrigem <= 16 && baseDestino >= 2 && baseDestino <= 16) {
 
@@ -35,7 +35,8 @@ public class ConversorBase {
 
 	private static boolean verificarBase(String numero, long base) {
 		for (int i = 0; i < numero.length(); i++) {
-			if (digitos.indexOf(numero.charAt(i)) >= base) {
+			int valor = digitos.indexOf(numero.charAt(i));
+			if (valor >= base || valor == -1) {
 				return false;
 			}
 		}

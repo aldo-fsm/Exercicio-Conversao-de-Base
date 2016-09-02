@@ -10,7 +10,7 @@ public class ConversorBaseBigDecimal {
 
 	public static String converter(String numero, int baseOrigem, int baseDestino) {
 
-		numero.toUpperCase();
+		numero = numero.toUpperCase();
 
 		if (baseOrigem >= 2 && baseOrigem <= 16 && baseDestino >= 2 && baseDestino <= 16) {
 
@@ -36,10 +36,14 @@ public class ConversorBaseBigDecimal {
 	}
 
 	public static String converterFracionario(String numero, int baseOrigem, int baseDestino, int limite) {
+		numero = numero.toUpperCase();
+		String[] aux;
 
-		numero.toUpperCase();
-		String[] aux = numero.split(",");
-
+		if (numero.contains(",")) {
+			aux = numero.split(",");
+		} else {
+			return converter(numero, baseOrigem, baseDestino);
+		}
 		return converter(aux[0], baseOrigem, baseDestino) + ","
 				+ deDecimalFracionario(paraDecimalFracionario(aux[1], baseOrigem, limite), baseDestino);
 	}
@@ -87,7 +91,8 @@ public class ConversorBaseBigDecimal {
 
 	private static boolean verificarBase(String numero, long base) {
 		for (int i = 0; i < numero.length(); i++) {
-			if (digitos.indexOf(numero.charAt(i)) >= base) {
+			int valor = digitos.indexOf(numero.charAt(i));
+			if (valor >= base || valor == -1) {
 				return false;
 			}
 		}
